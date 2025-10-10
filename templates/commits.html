@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Commits</title>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h2>Répartition des commits par minute (0–59)</h2>
+  <p class="hint">Source: API GitHub → <code>commit.author.date</code>. Chaque barre = nombre de commits dont la minute correspond.</p>
+  <div id="chart"></div>
+
+  <script>
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(draw);
+
+    function draw() {
+      fetch('/commits/data')
+        .then(r => r.json())
+        .then(({ results }) => {
+          // Transforme en DataTable [Minute, Count]
+          const dataTable = new google.visualization.DataTable();
+          dataTable.addColumn('string', 'Minute');
+          dataTable.addColumn('number', 'Commits');
+
+          results.forEach(row => {
+            dataTable.addRow([String(row.minute).padStart(2, '0'), row.count]);
+          });
+
+          const options = {
+            title: 'Commits par minute (0–59)',
+            legend: { position: 'none' },
+            hAxis: { title: 'Minute', slantedText: true },
+            vAxis: { title: 'Nombre de commits', minValue: 0 },
+            bar: { groupWidth: '80%' }
+          };
+
+          const chart = new google.visualization.ColumnChart(document.getElementById('chart'));
+          chart.draw(dataTable, options);
+        })
+        .catch(err => {
+          document.getElementById('chart').innerHTML =
+            '<p>Erreur de chargement des données : ' + (err?.message || err) + '</p>';
+        });
+    }
+  </script>
+</body>
+</html>
