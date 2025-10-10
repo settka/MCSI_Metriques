@@ -1,13 +1,13 @@
 <html>
   <head>
   <meta charset="UTF-8">
-  <title>Contact</title>
+  <title>Formulaire de contact</title>
 </head>
 <body>
 
   <h1>Formulaire de contact</h1>
 
-  <form action="/submit" method="post">
+  <form id="contactForm">
     <label for="name">Nom :</label><br>
     <input type="text" id="name" name="name" required><br><br>
 
@@ -20,8 +20,35 @@
     <label for="message">Message :</label><br>
     <textarea id="message" name="message" rows="5" cols="33" required></textarea><br><br>
 
-    <input type="submit" value="Envoyer">
+    <button type="submit">Envoyer</button>
   </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        subject: form.subject.value,
+        message: form.message.value
+      };
+
+      // Simule un "envoi"
+      status.textContent = "⏳ Envoi en cours...";
+      
+      setTimeout(() => {
+        console.log("Message envoyé :", data);
+        status.textContent = "✅ Message envoyé avec succès !";
+        form.reset();
+      }, 1000);
+    });
+  </script>
 
 </body>
 </html>
