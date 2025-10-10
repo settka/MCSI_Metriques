@@ -44,7 +44,7 @@ def extract_minutes(date_string):
 @app.route('/commits/data')
 def commits_data():
     # Repo source de l’énoncé (tu peux remplacer par ton fork : owner/repo)
-    owner = "Gigique"
+    owner = "OpenRSI"
     repo = "5MCSI_Metriques"
     api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100"
 
