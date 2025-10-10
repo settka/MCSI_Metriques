@@ -44,9 +44,7 @@ def extract_minutes(date_string):
 @app.route('/commits/data')
 def commits_data():
     # Repo source de l’énoncé (tu peux remplacer par ton fork : owner/repo)
-    owner = "Gigique"
-    repo = "5MCSI_Metriques"
-    api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100"
+    api_url = f"https://api.github.com/repos/Gigique/5MCSI_Metriques/commits"
 
     req = Request(api_url, headers={"User-Agent": "metrics-app"})
     with urlopen(req) as resp:
