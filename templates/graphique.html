@@ -7,9 +7,9 @@
   <body>
     <div id="chart_div"></div>
     <script>
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawBackgroundColor);
-     function drawBackgroundColor() {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+    function drawBackgroundColor() {
     function drawChart(data) {
     // Convertir les données récupérées en un tableau utilisable par Google Charts
     var dataTable = new google.visualization.DataTable();
@@ -25,7 +25,7 @@
       curveType: 'function',
       legend: { position: 'bottom' }
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
     chart.draw(dataTable, options);
   }
   // Récupération de données depuis notre API /tawarano/
