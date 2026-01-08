@@ -10,43 +10,45 @@
         google.charts.setOnLoadCallback(drawChart);
 
         // Callback that creates and populates a data table,
-        // instantiates the bar chart, passes in the data and
+        // instantiates the column chart, passes in the data and
         // draws it.
         function drawChart() {
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date'); // Par exemple, pour les dates ou périodes
-            data.addColumn('number', 'Température (°C)'); // Pour les valeurs de température
-            data.addRows([
-                ['Janvier', 5],
-                ['Février', 6],
-                ['Mars', 10],
-                ['Avril', 15],
-                ['Mai', 18],
-                ['Juin', 22]
-            ]);
+            // Récupération de données depuis notre API /tawarano/
+            fetch('/tawarano/')
+                .then(response => response.json())
+                .then(data => {
+                    // Convertir les données récupérées en un tableau utilisable par Google Charts
+                    var dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn('string', 'Date');
+                    dataTable.addColumn('number', 'Température (°C)');
+                    
+                    data.results.forEach(entry => {
+                        var date = new Date(entry.Jour * 1000);
+                        dataTable.addRow([date.toLocaleDateString(), entry.temp]);
+                    });
 
-            // Set chart options
-            var options = {
-                'title':'Évolution des températures à Tawarano',
-                'width':600, // Vous pouvez ajuster la largeur
-                'height':400, // Vous pouvez ajuster la hauteur
-                hAxis: {
-                    title: 'Mois'
-                },
-                vAxis: {
-                    title: 'Température (°C)'
-                }
-            };
+                    // Set chart options
+                    var options = {
+                        'title':'Évolution des températures de la ville de Tawarano',
+                        'width':600,
+                        'height':400,
+                        hAxis: {
+                            title: 'Date'
+                        },
+                        vAxis: {
+                            title: 'Température (°C)'
+                        }
+                    };
 
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
+                    // Instantiate and draw our chart, passing in some options.
+                    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                    chart.draw(dataTable, options);
+                });
         }
     </script>
 </head>
 <body>
-    <!--Div that will hold the bar chart-->
+    <!--Div that will hold the column chart-->
     <div id="chart_div"></div>
 </body>
 </html>
